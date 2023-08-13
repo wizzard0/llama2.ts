@@ -37,7 +37,10 @@ Arguments:
 - `-n <int>` - number of tokens to generate (0..256, default 256)
 - `-p <float>` - p value for nucleus sampling, default 0.9
 
+UPD: see also [llama2.js] by @epicure for a browser version. Glad I missed it before starting this project, otherwise I'd probably never start it :D
+
 [t348]: https://github.com/wizzard0/t348-loader
 [TinyStories]: https://arxiv.org/abs/2305.07759
 [llama2.c]: https://github.com/karpathy/llama2.c
 [Llama2]: https://ai.meta.com/llama/
+[llama2.js]: https://github.com/epicure/llama2.js
