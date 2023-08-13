@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "target": "es2022",                                  /* bigint */
+    "module": "ES2022",                                /* Specify what module code is generated. */
+    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+  }
+}
