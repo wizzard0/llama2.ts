@@ -37,22 +37,35 @@ class BufferReader {
     this.position += bytes.length;
     return bytes;
   }
+}
 
+
+
+class FileHandleReader {
+  handle: number;
+  position: number;
+  constructor(handle: number, offset: number) {
+    this.handle = handle;
+    this.position = offset;
+  }
   getF32Array(...dims: number[]): Float32Array {
     let totalFloats = dims.reduce((a, b) => a * b);
 //    console.log({offset, dims, totalBytes, bb:this.view.buffer.length})
-    let ret = new Float32Array(this.view.buffer, this.position + this.view.byteOffset, totalFloats);
+    let bytes = Buffer.alloc(totalFloats * f32bytes);
+    fs.readSync(this.handle, bytes, 0, bytes.length, this.position);
+    let ret = new Float32Array(bytes.buffer, bytes.byteOffset, totalFloats);
     this.position += totalFloats * f32bytes;
     return ret;
   }
 
   getF32Arrays(dim0: number, ...dims: number[]): Float32Array[] {
     let array = new Array(dim0);
-    for (let i = 0; i < dim0; ++i) {array[i] = this.getF32Array(...dims);}
+    for (let i = 0; i < dim0; ++i) {
+      array[i] = this.getF32Array(...dims);
+    }
     return array;
   }
 }
-
 interface Config {
   dim: int;
   hidden_dim: int;
@@ -96,7 +109,7 @@ interface TransformerWeights {
   wcls: Float32Array;
 }
 
-function readWeights(config: Config, buffer: BufferReader, shared_weights:boolean):TransformerWeights {
+function readWeights(config: Config, buffer: FileHandleReader, shared_weights:boolean):TransformerWeights {
   let w={} as TransformerWeights;
   w.token_embedding_table = buffer.getF32Array(config.vocab_size, config.dim);
   w.rms_att_weight = buffer.getF32Arrays(config.n_layers, config.dim);
@@ -419,10 +432,7 @@ function main(){
   fs.readSync(fileHandle, configBuffer, 0, configSize, 0);
   let config = readConfig(new BufferReader(configBuffer));
   //console.error(config);
-  let rest = fs.statSync(checkpoint).size - configSize;
-  let restBuffer = Buffer.alloc(rest);
-  fs.readSync(fileHandle, restBuffer, 0, rest, configSize);
-  let weights = readWeights(config, new BufferReader(restBuffer),config.shared_weights);
+  let weights = readWeights(config, new FileHandleReader(fileHandle, configSize),config.shared_weights);
   fs.closeSync(fileHandle);
 
   // right now we cannot run for more than config.seq_len steps

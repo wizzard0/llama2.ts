@@ -3,12 +3,12 @@ Inference for [Llama2]-like Transformer models in one TypeScript file
 
 Heavily based on the Andrej Karpathy's [llama2.c].
 
-Mostly of educational value (understand something by implementing it yourself! porting in this case but still :P),
-as it can't (yet?) load the full Llama2 model (even 7B) due to memory constraints of the JS engines.
+Mostly of educational value (understand something by implementing it yourself! porting in this case but still :P)
 
 ### Features
 - Binary compatible (i.e. should produce exactly the same outputs as the C version given the parameters and random seed)
 - Achieves around 70/25/10 tokens per second for the 15/45/110M models, respectively.
+- Can run the full 7B model with 0.16 tokens per second on my laptop o_O
 
 Includes the [TinyStories] 15M model.
 
