@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "demo-node": "node --experimental-loader=./t348.mjs llama2.ts stories15M.bin -i \"Once upon a time\"",
-    "demo-bun": "node --experimental-loader=./t348.mjs llama2.ts stories15M.bin -i \"Once upon a time\"",
+    "demo-bun": "bun llama2.ts stories15M.bin -i \"Once upon a time\"",
     "deterministic": "node --experimental-loader=./t348.mjs llama2.ts stories15M.bin -s 1 -t 0 -i \"Once upon a time\""
   },
   "keywords": ["llama2","llm","ml"],
